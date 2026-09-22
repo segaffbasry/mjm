@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { posthogSnippet } from "@/lib/posthog";
 
 const garamond = localFont({
   src: "../public/fonts/EBGaramond-VariableFont_wght.woff",
@@ -32,6 +33,7 @@ export const metadata: Metadata = {
   description:
     "MJM Marine has over 40 years’ of World Class marine outfitting experience. With in-house manufacturing facilities, MJM can offer clients a complete project management service with bespoke and turnkey outfitting and innovative solutions.",
   icons: { icon: "/favicon.ico" },
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
@@ -41,6 +43,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${garamond.variable} ${sen.variable} ${swiss.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: posthogSnippet }} />
+      </head>
       <body>{children}</body>
     </html>
   );

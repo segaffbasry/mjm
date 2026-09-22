@@ -17,22 +17,40 @@ export default function Services() {
     if (!matchMedia("(pointer: fine)").matches) return;
     const xTo = gsap.quickTo(c, "x", { duration: 0.6, ease: "power3" });
     const yTo = gsap.quickTo(c, "y", { duration: 0.6, ease: "power3" });
+    const pos = { x: -1, y: -1 };
+    let shown = false;
+
+    // Visibility is derived from whether the pointer is over a tile *right now*.
+    // pointerleave alone isn't enough: scrolling moves tiles away from a still
+    // pointer without firing it, which left the disc stranded over other sections.
+    const sync = () => {
+      const el = document.elementFromPoint(pos.x, pos.y);
+      const over = !!el && g.contains(el) && !!el.closest("a");
+      if (over === shown) return;
+      shown = over;
+      if (over) gsap.set(c, { x: pos.x, y: pos.y });
+      gsap.to(c, over
+        ? { scale: 1, autoAlpha: 1, duration: 0.7, ease: "expo.out", overwrite: true }
+        : { scale: 0, autoAlpha: 0, duration: 0.4, ease: "expo.out", overwrite: true });
+    };
     const move = (e: PointerEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
+      pos.x = e.clientX;
+      pos.y = e.clientY;
+      xTo(pos.x);
+      yTo(pos.y);
+      sync();
     };
-    const enter = (e: PointerEvent) => {
-      gsap.set(c, { x: e.clientX, y: e.clientY });
-      gsap.to(c, { scale: 1, autoAlpha: 1, duration: 0.7, ease: "expo.out" });
+    const out = () => {
+      pos.x = pos.y = -1;
+      sync();
     };
-    const leave = () => gsap.to(c, { scale: 0, autoAlpha: 0, duration: 0.5, ease: "expo.out" });
-    g.addEventListener("pointermove", move);
-    g.addEventListener("pointerenter", enter);
-    g.addEventListener("pointerleave", leave);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("scroll", sync, { passive: true });
+    document.documentElement.addEventListener("pointerleave", out);
     return () => {
-      g.removeEventListener("pointermove", move);
-      g.removeEventListener("pointerenter", enter);
-      g.removeEventListener("pointerleave", leave);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("scroll", sync);
+      document.documentElement.removeEventListener("pointerleave", out);
     };
   }, []);
 
