@@ -21,13 +21,18 @@ export default function Portfolio() {
         </div>
         <div className="mt-14 grid gap-12 md:grid-cols-12 md:gap-8 lg:mt-20">
           {portfolio.items.map((item, i) => (
-            <a key={item.title} href={item.href} className={`group block ${i === 0 ? "md:col-span-7" : "md:col-span-5 md:mt-28"}`}>
+            <a key={item.title} href={item.href} className={`portfolio-card group block ${i === 0 ? "md:col-span-7" : "md:col-span-5 md:mt-28"}`}>
               <div data-reveal="clip" className={`relative overflow-hidden bg-bone ${i === 0 ? "aspect-[4/3]" : "aspect-[4/5]"}`}>
-                <Image src={item.image} alt={item.alt} fill sizes={i === 0 ? "(min-width: 768px) 55vw, 100vw" : "(min-width: 768px) 40vw, 100vw"} className="object-cover transition-transform duration-1000 group-hover:scale-105" />
-                <span className="absolute bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-paper text-navy transition-colors group-hover:bg-teal group-hover:text-white"><Arrow className="-rotate-45" /></span>
+                <div className="portfolio-photo absolute inset-0">
+                <Image src={item.image} alt={item.alt} fill sizes={i === 0 ? "(min-width: 768px) 55vw, 100vw" : "(min-width: 768px) 40vw, 100vw"} className="object-cover" />
+                </div>
+                <span aria-hidden className="portfolio-arrow absolute bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-paper text-navy transition-colors group-hover:bg-teal group-hover:text-white"><Arrow className="-rotate-45" /></span>
               </div>
               <div className="mt-5 flex items-center justify-between gap-4 border-b border-navy/20 pb-5">
-                <h3 className="display text-[clamp(30px,3vw,48px)]">{item.title}</h3>
+                <div>
+                  <p className="eyebrow mb-3 text-teal !tracking-[0.18em]">{i === 0 ? "Life at sea, elevated" : "Extraordinary spaces, ashore"}</p>
+                  <h3 className="display text-[clamp(30px,3vw,48px)]">{item.title}</h3>
+                </div>
                 <span className="font-cond text-sm tracking-[0.2em] text-teal">0{i + 1}</span>
               </div>
             </a>

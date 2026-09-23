@@ -166,11 +166,15 @@ export default function Hero() {
         </h1>
 
         <a data-hero-in href="#portfolio" className="hero-portfolio group absolute right-[var(--gutter)] top-0 hidden h-36 w-36 flex-col items-center justify-center gap-4 rounded-full border border-white/50 bg-navy/20 text-center backdrop-blur-sm transition-colors hover:border-teal hover:bg-teal lg:flex">
-          <Arrow className="-rotate-45" />
+          <Arrow className="-rotate-45 transition-transform duration-700 group-hover:rotate-0 group-focus-visible:rotate-0" />
           <span className="eyebrow !tracking-[0.18em]">Explore<br />our portfolio</span>
         </a>
 
-        <div className="mt-12 flex items-end justify-between gap-8 border-t border-white/20 pt-6 md:mt-16">
+        <a data-hero-in href="#portfolio" className="eyebrow mt-7 inline-flex min-h-11 items-center gap-4 text-teal-mist lg:hidden">
+          <span className="uline">Explore our portfolio</span><Arrow className="-rotate-45" />
+        </a>
+
+        <div className="mt-8 flex items-end justify-between gap-8 border-t border-white/20 pt-6 md:mt-16">
           <button
             data-hero-in
             onClick={() => lenis?.scrollTo("#about", { duration: 1.8 })}
@@ -209,6 +213,7 @@ export default function Hero() {
                   key={s.src}
                   onClick={() => goTo(i)}
                   aria-label={`Slide ${i + 1}`}
+                  aria-current={index === i ? "true" : undefined}
                   className="group relative h-6 w-10 md:w-16"
                 >
                   <span className="absolute inset-x-0 top-1/2 h-px bg-white/25 transition-colors group-hover:bg-white/60" />

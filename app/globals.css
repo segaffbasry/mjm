@@ -255,3 +255,42 @@ a:hover .uline {
   padding-right: 0.12em;
   margin-right: -0.12em;
 }
+
+/* Quiet details that echo the circular brand mark. */
+.hero-portfolio::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border: 1px solid transparent;
+  border-top-color: var(--color-teal-mist);
+  border-right-color: var(--color-teal-mist);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  transition: transform 1.2s var(--ease-expo);
+  pointer-events: none;
+}
+.hero-portfolio:hover::before,
+.hero-portfolio:focus-visible::before {
+  transform: rotate(60deg);
+}
+.portfolio-photo {
+  transition: transform 1.4s var(--ease-expo);
+}
+.portfolio-card:hover .portfolio-photo,
+.portfolio-card:focus-visible .portfolio-photo {
+  transform: scale(1.045);
+}
+.portfolio-arrow {
+  transition: background-color 0.5s, color 0.5s, transform 0.7s var(--ease-expo);
+}
+.portfolio-card:hover .portfolio-arrow,
+.portfolio-card:focus-visible .portfolio-arrow {
+  transform: rotate(45deg);
+  background: var(--color-teal);
+  color: white;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 6px;
+}
