@@ -139,7 +139,7 @@ export default function Hero() {
               src={s.src}
               alt=""
               fill
-              priority={i === 0}
+              preload={i === 0}
               sizes="100vw"
               className="object-cover will-change-transform"
             />
@@ -155,14 +155,20 @@ export default function Hero() {
         data-hero-content
         className="absolute inset-x-0 bottom-0 z-[4] px-[var(--gutter)] pb-[clamp(28px,5vh,56px)]"
       >
-        <h1 className="max-w-[1400px]">
-          <span className="display block text-[clamp(64px,13.5vw,240px)] italic leading-[0.86] text-white">
+        <p data-hero-in className="eyebrow mb-7 text-teal-mist">Craftsmanship. At every scale.</p>
+        <h1 className="max-w-[1000px]">
+          <span className="display block text-[clamp(62px,8.5vw,148px)] italic leading-[0.86] text-white">
             <Split text={hero.title} chars />
           </span>
-          <span className="hero-sub eyebrow mt-5 block pl-[0.3em] text-[clamp(13px,1.35vw,22px)] tracking-[0.5em] text-white/90 md:mt-7">
+          <span className="hero-sub mt-5 block font-cond text-[clamp(26px,3.2vw,54px)] uppercase leading-none tracking-[0.15em] text-white md:mt-7">
             <Split text={hero.description} />
           </span>
         </h1>
+
+        <a data-hero-in href="#portfolio" className="hero-portfolio group absolute right-[var(--gutter)] top-0 hidden h-36 w-36 flex-col items-center justify-center gap-4 rounded-full border border-white/50 bg-navy/20 text-center backdrop-blur-sm transition-colors hover:border-teal hover:bg-teal lg:flex">
+          <Arrow className="-rotate-45" />
+          <span className="eyebrow !tracking-[0.18em]">Explore<br />our portfolio</span>
+        </a>
 
         <div className="mt-12 flex items-end justify-between gap-8 border-t border-white/20 pt-6 md:mt-16">
           <button

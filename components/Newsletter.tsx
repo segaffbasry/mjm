@@ -14,7 +14,7 @@ export default function Newsletter() {
       <div className="mx-auto grid max-w-[1600px] gap-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <div data-reveal="up" className="mb-8 flex items-center gap-4">
-            <span className="font-cond text-sm tracking-[0.2em] text-teal-mist">05</span>
+            <span className="font-cond text-sm tracking-[0.2em] text-teal-mist">06</span>
             <span className="h-px w-12 bg-white/30" />
           </div>
           <h2 data-reveal="words" className="display text-[clamp(48px,6vw,104px)] italic">

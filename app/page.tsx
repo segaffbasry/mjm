@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Intro from "@/components/Intro";
 import Capabilities from "@/components/Capabilities";
+import Portfolio from "@/components/Portfolio";
 import Services from "@/components/Services";
 import Supplier from "@/components/Supplier";
 import Newsletter from "@/components/Newsletter";
@@ -19,6 +20,7 @@ export default function Home() {
         <Hero />
         <Intro />
         <Capabilities />
+        <Portfolio />
         <Services />
         <Supplier />
         <Newsletter />

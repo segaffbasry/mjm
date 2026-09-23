@@ -1,11 +1,11 @@
-// All copy is verbatim from https://mjm-group.com/ — do not rewrite.
+// Core company copy and portfolio categories sourced from https://mjm-group.com/.
 
 const ORIGIN = "https://mjm-group.com";
 
 export const nav = [
   { label: "About Us", href: "#about" },
   { label: "Our services", href: "#services" },
-  { label: "Portfolio", href: `${ORIGIN}/portfolio` },
+  { label: "Portfolio", href: "#portfolio" },
   { label: "News", href: `${ORIGIN}/news` },
   { label: "Careers", href: `${ORIGIN}/careers` },
   { label: "Contact", href: "#contact" },
@@ -152,5 +152,16 @@ export const footer = {
   legal: [
     { label: "Anti-Slavery Policy", href: `${ORIGIN}/anti-slavery-policy` },
     { label: "Privacy Policy", href: `${ORIGIN}/privacy-policy` },
+  ],
+};
+
+// Category imagery and destinations from https://mjm-group.com/portfolio.
+export const portfolio = {
+  title: "Our portfolio",
+  text: "Our finished products are among some of the finest in the world, which you can discover for yourself in our project portfolio.",
+  href: `${ORIGIN}/portfolio`,
+  items: [
+    { title: "Marine Interiors", image: "/images/portfolio-marine.jpg", href: `${ORIGIN}/portfolio/marine-interiors`, alt: "Light-filled observation lounge with panoramic ocean views" },
+    { title: "Specialist Interiors", image: "/images/portfolio-specialist.jpg", href: `${ORIGIN}/portfolio/specialist-interiors`, alt: "Polished stone reception with sculptural chandeliers and bespoke interior finishes" },
   ],
 };

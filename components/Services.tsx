@@ -60,7 +60,7 @@ export default function Services() {
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <div data-reveal="up" className="mb-8 flex items-center gap-4">
-              <span className="font-cond text-sm tracking-[0.2em] text-teal-mist">03</span>
+              <span className="font-cond text-sm tracking-[0.2em] text-teal-mist">04</span>
               <span className="h-px w-12 bg-white/30" />
             </div>
             <h2 data-reveal="words" className="display text-[clamp(56px,8vw,150px)] italic">
