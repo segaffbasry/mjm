@@ -28,7 +28,7 @@ export default function Intro() {
   }, [ready]);
 
   return (
-    <section ref={ref} id="about" className="relative overflow-hidden bg-paper px-[var(--gutter)] py-[clamp(110px,18vw,260px)]">
+    <section ref={ref} id="about" className="relative overflow-hidden bg-paper px-[var(--gutter)] py-[clamp(72px,9vw,150px)]">
 
       <div className="relative mx-auto grid max-w-[1600px] gap-10 lg:grid-cols-12 ">
         <div className="lg:col-span-3">

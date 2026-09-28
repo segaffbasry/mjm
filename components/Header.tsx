@@ -59,12 +59,15 @@ export default function Header() {
     }
   }, [open, lenis]);
 
+  // Demo rule: nothing leaves the page. In-page anchors still scroll; links
+  // that would go off to mjm-group.com are inert.
   const go = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (!href.startsWith("#")) return;
     e.preventDefault();
+    if (!href.startsWith("#")) return;
     setOpen(false);
     lenis?.scrollTo(href, { duration: 1.8, offset: 0 });
   };
+  const hash = (href: string) => (href.startsWith("#") ? href : undefined);
 
   const dark = solid && !open;
 
@@ -83,7 +86,7 @@ export default function Header() {
         >
           <nav className="hidden flex-1 items-center gap-9 lg:flex" aria-label="Primary">
             {nav.slice(0, 3).map((n) => (
-              <a key={n.label} data-h href={n.href} onClick={(e) => go(e, n.href)} className="eyebrow">
+              <a key={n.label} data-h href={hash(n.href)} onClick={(e) => go(e, n.href)} className="eyebrow cursor-pointer">
                 <Roll>{n.label}</Roll>
               </a>
             ))}
@@ -95,7 +98,7 @@ export default function Header() {
 
           <nav className="hidden flex-1 items-center justify-end gap-9 lg:flex" aria-label="Secondary">
             {nav.slice(3).map((n) => (
-              <a key={n.label} data-h href={n.href} onClick={(e) => go(e, n.href)} className="eyebrow">
+              <a key={n.label} data-h href={hash(n.href)} onClick={(e) => go(e, n.href)} className="eyebrow cursor-pointer">
                 <Roll>{n.label}</Roll>
               </a>
             ))}
@@ -138,9 +141,9 @@ export default function Header() {
           {nav.map((n, i) => (
             <a
               key={n.label}
-              href={n.href}
+              href={hash(n.href)}
               onClick={(e) => go(e, n.href)}
-              className="group flex items-baseline gap-5 border-b border-white/10 py-3"
+              className="group flex cursor-pointer items-baseline gap-5 border-b border-white/10 py-3"
             >
               <span className="font-cond text-sm text-teal-mist">0{i + 1}</span>
               <span className="mask">

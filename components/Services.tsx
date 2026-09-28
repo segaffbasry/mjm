@@ -5,16 +5,16 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { services } from "@/lib/content";
-import { Arrow, Split } from "./ui";
+import { Arrow, DeadLink, Split } from "./ui";
 import { useMotion } from "./SmoothScroll";
 
 export default function Services() {
-  const { ready } = useMotion();
+  const { ready, lenis } = useMotion();
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLUListElement>(null);
-  const cursor = useRef<HTMLDivElement>(null);
+  const trigger = useRef<ScrollTrigger | null>(null);
 
   // Desktop: the section pins and the cards travel sideways with the scroll.
   // Below lg the same track is a native swipeable, snapping row.
@@ -33,7 +33,7 @@ export default function Services() {
       if (distance() === 0) return;
       const bar = root.current!.querySelector<HTMLElement>("[data-track-progress]");
 
-      gsap.to(t, {
+      const tween = gsap.to(t, {
         x: () => -distance(),
         ease: "none",
         scrollTrigger: {
@@ -47,59 +47,37 @@ export default function Services() {
           onUpdate: (self) => bar && gsap.set(bar, { scaleX: self.progress }),
         },
       });
+      trigger.current = tween.scrollTrigger ?? null;
+      return () => void (trigger.current = null);
     });
     return () => mm.revert();
   }, [ready]);
 
-  // A disc trails the pointer while it is over a card.
-  useEffect(() => {
-    const c = cursor.current!;
-    const g = track.current!;
-    if (!matchMedia("(pointer: fine)").matches) return;
-    const xTo = gsap.quickTo(c, "x", { duration: 0.6, ease: "power3" });
-    const yTo = gsap.quickTo(c, "y", { duration: 0.6, ease: "power3" });
-    const pos = { x: -1, y: -1 };
-    let shown = false;
-
-    // Visibility is derived from what sits under the pointer *right now*:
-    // pointerleave alone misses the case where scrolling slides a card out
-    // from under a still pointer, which used to strand the disc on screen.
-    const sync = () => {
-      const el = document.elementFromPoint(pos.x, pos.y);
-      const over = !!el && g.contains(el) && !!el.closest("a");
-      if (over === shown) return;
-      shown = over;
-      if (over) gsap.set(c, { x: pos.x, y: pos.y });
-      gsap.to(
-        c,
-        over
-          ? { scale: 1, autoAlpha: 1, duration: 0.7, ease: "expo.out", overwrite: true }
-          : { scale: 0, autoAlpha: 0, duration: 0.4, ease: "expo.out", overwrite: true },
-      );
-    };
-    const move = (e: PointerEvent) => {
-      pos.x = e.clientX;
-      pos.y = e.clientY;
-      xTo(pos.x);
-      yTo(pos.y);
-      sync();
-    };
-    const out = () => {
-      pos.x = pos.y = -1;
-      sync();
-    };
-    window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("scroll", sync, { passive: true });
-    viewport.current!.addEventListener("scroll", sync, { passive: true });
-    document.documentElement.addEventListener("pointerleave", out);
-    const vp = viewport.current!;
-    return () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("scroll", sync);
-      vp.removeEventListener("scroll", sync);
-      document.documentElement.removeEventListener("pointerleave", out);
-    };
-  }, []);
+  // One card's worth of travel, in whichever direction the arrow points.
+  // On desktop the cards are driven by the page scroll, so the step is
+  // converted into the matching amount of vertical scrolling.
+  const step = (dir: 1 | -1) => {
+    const t = track.current!;
+    const card = t.firstElementChild as HTMLElement | null;
+    const gap = parseFloat(getComputedStyle(t).columnGap) || 16;
+    const amount = (card?.offsetWidth ?? 300) + gap;
+    const st = trigger.current;
+    if (st) {
+      const span = st.end - st.start;
+      const travel = -(gsap.getProperty(t, "x") as number);
+      const distance = Math.max(1, span - window.innerHeight * 0.5);
+      const target = st.start + ((travel + dir * amount) / distance) * span;
+      if (lenis) lenis.scrollTo(target, { duration: 1 });
+      else window.scrollTo({ top: target, behavior: "smooth" });
+    } else {
+      // Snap points fight a relative scrollBy, so move to an exact card index.
+      const v = viewport.current!;
+      const at = v.scrollLeft / amount;
+      const index = dir > 0 ? Math.floor(at) + 1 : Math.ceil(at) - 1;
+      const max = v.scrollWidth - v.clientWidth;
+      v.scrollTo({ left: Math.min(max, Math.max(0, index * amount)), behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     const id = setTimeout(() => ScrollTrigger.refresh(), 300);
@@ -110,7 +88,7 @@ export default function Services() {
     <section ref={root} id="services" className="relative bg-navy text-white">
       <div
         ref={stage}
-        className="grain relative flex min-h-[600px] flex-col justify-center overflow-hidden py-[clamp(80px,10vw,120px)] lg:h-[100svh] lg:py-0"
+        className="grain relative flex min-h-[600px] flex-col justify-center overflow-hidden py-[clamp(64px,7vw,96px)] lg:h-[100svh] lg:py-0"
       >
         <div className="relative mx-auto grid w-full max-w-[1600px] items-center gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="px-[var(--gutter)] lg:col-span-4 lg:pr-0">
@@ -124,14 +102,34 @@ export default function Services() {
             <p data-reveal="up" className="mt-7 max-w-[42ch] text-[15px] leading-[1.75] text-white/70">
               {services.text}
             </p>
-            <div data-reveal="up" className="mt-10 hidden h-px w-[220px] bg-white/20 lg:block">
-              <span data-track-progress className="block h-full origin-left scale-x-0 bg-teal" />
+            <div data-reveal="up" className="mt-9 flex items-center gap-6">
+              <div className="hidden h-px w-[150px] bg-white/20 lg:block">
+                <span data-track-progress className="block h-full origin-left scale-x-0 bg-teal" />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => step(-1)}
+                  aria-label="Previous service"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 transition-colors duration-500 hover:border-white hover:bg-white hover:text-navy"
+                >
+                  <Arrow className="rotate-180" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => step(1)}
+                  aria-label="Next service"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 transition-colors duration-500 hover:border-white hover:bg-white hover:text-navy"
+                >
+                  <Arrow />
+                </button>
+              </div>
             </div>
           </div>
 
           <div
             ref={viewport}
-            className="no-bar overflow-x-auto overscroll-x-contain scroll-smooth px-[var(--gutter)] lg:col-span-8 lg:overflow-hidden lg:pl-0 lg:pr-[var(--gutter)] lg:[mask-image:linear-gradient(to_right,transparent_0,black_48px)]"
+            className="no-bar overflow-x-auto overscroll-x-contain px-[var(--gutter)] lg:col-span-8 lg:overflow-hidden lg:pl-0 lg:pr-[var(--gutter)] lg:[mask-image:linear-gradient(to_right,transparent_0,black_48px)]"
           >
             <ul className="flex snap-x snap-mandatory gap-4 pb-2 lg:snap-none lg:pb-0" ref={track}>
               {services.items.map((s, i) => (
@@ -139,7 +137,7 @@ export default function Services() {
                   key={s.title}
                   className="w-[66vw] shrink-0 snap-start sm:w-[42vw] lg:w-[clamp(230px,23vw,320px)]"
                 >
-                  <a href={s.href} className="group block lg:cursor-none">
+                  <DeadLink className="group block">
                     <div
                       data-reveal="clip"
                       data-delay={i * 0.1}
@@ -178,7 +176,7 @@ export default function Services() {
                         <Arrow className="-rotate-45" />
                       </span>
                     </div>
-                  </a>
+                  </DeadLink>
                 </li>
               ))}
             </ul>
@@ -186,13 +184,6 @@ export default function Services() {
         </div>
       </div>
 
-      <div
-        ref={cursor}
-        aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[60] -ml-11 -mt-11 hidden h-22 w-22 scale-0 items-center justify-center rounded-full bg-paper text-navy opacity-0 lg:flex"
-      >
-        <Arrow />
-      </div>
     </section>
   );
 }

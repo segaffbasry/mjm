@@ -3,11 +3,11 @@ import { Split } from "./ui";
 
 export default function Capabilities() {
   return (
-    <section className="relative bg-paper px-[var(--gutter)] pb-[clamp(100px,14vw,200px)]">
+    <section className="relative bg-paper px-[var(--gutter)] pb-[clamp(64px,7vw,112px)]">
       <div className="mx-auto max-w-[1600px]">
         <div data-reveal="line" className="h-px w-full bg-navy/15" />
 
-        <div className="grid gap-12 pt-14 lg:grid-cols-12 lg:pt-20">
+        <div className="grid gap-10 pt-10 lg:grid-cols-12 lg:pt-14">
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-32">
               <div data-reveal="up" className="mb-8 flex items-center gap-4">
@@ -24,7 +24,7 @@ export default function Capabilities() {
             {capabilities.items.map((c, i) => (
               <li
                 key={c.title}
-                className="group relative isolate flex min-h-[300px] flex-col overflow-hidden border-b border-r border-navy/15 p-8 md:min-h-[360px] md:p-10"
+                className="group relative isolate flex min-h-[280px] flex-col overflow-hidden border-b border-r border-navy/15 p-8 md:min-h-[330px] md:p-10"
               >
                 {/* hover fill rises from the floor */}
                 <span className="absolute inset-0 -z-10 bg-navy [clip-path:inset(100%_0_0_0)] transition-[clip-path] duration-[900ms] ease-[var(--ease-expo)] group-hover:[clip-path:inset(0_0_0_0)]" />
@@ -42,7 +42,7 @@ export default function Capabilities() {
                   </span>
                 </div>
 
-                <div className="mt-auto pt-12">
+                <div className="mt-auto pt-8">
                   <h3 className="display text-[clamp(26px,2.2vw,36px)] leading-[1.05] text-navy transition-[color,transform] duration-700 ease-[var(--ease-expo)] group-hover:-translate-y-2 group-hover:text-white">
                     {c.title}
                   </h3>

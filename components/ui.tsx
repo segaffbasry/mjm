@@ -35,6 +35,30 @@ export function Split({
   );
 }
 
+/**
+ * This is a private sales demo, so nothing may navigate off the page: every
+ * outbound link keeps its styling and hover motion but is inert. With no href
+ * there is nothing for the browser to follow and no click handler is needed,
+ * which also keeps this usable from server components.
+ */
+export function DeadLink({
+  children,
+  className = "",
+  ...rest
+}: React.HTMLAttributes<HTMLAnchorElement> & { children: React.ReactNode }) {
+  return (
+    <a
+      {...rest}
+      role="link"
+      aria-disabled="true"
+      tabIndex={0}
+      className={`cursor-pointer ${className}`}
+    >
+      {children}
+    </a>
+  );
+}
+
 /** Two stacked copies of a label that roll on hover. */
 export function Roll({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (

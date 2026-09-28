@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { portfolio } from "@/lib/content";
-import { Arrow, Roll, Split } from "./ui";
+import { Arrow, DeadLink, Roll, Split } from "./ui";
 
 export default function Portfolio() {
   return (
-    <section id="portfolio" className="bg-paper px-[var(--gutter)] py-[clamp(90px,10vw,160px)]">
+    <section id="portfolio" className="bg-paper px-[var(--gutter)] py-[clamp(64px,7vw,112px)]">
       <div className="mx-auto max-w-[1600px]">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
@@ -19,9 +19,9 @@ export default function Portfolio() {
           </div>
           <p data-reveal="up" className="max-w-[45ch] text-base leading-relaxed text-navy/70 lg:col-span-4 lg:col-start-9">{portfolio.text}</p>
         </div>
-        <div className="mt-14 grid gap-12 md:grid-cols-12 md:gap-8 lg:mt-20">
+        <div className="mt-10 grid gap-10 md:grid-cols-12 md:gap-8 lg:mt-14">
           {portfolio.items.map((item, i) => (
-            <a key={item.title} href={item.href} className={`portfolio-card group block ${i === 0 ? "md:col-span-7" : "md:col-span-5 md:mt-28"}`}>
+            <DeadLink key={item.title} className={`portfolio-card group block ${i === 0 ? "md:col-span-7" : "md:col-span-5 md:mt-28"}`}>
               <div data-reveal="clip" className={`relative overflow-hidden bg-bone ${i === 0 ? "aspect-[4/3]" : "aspect-[4/5]"}`}>
                 <div className="portfolio-photo absolute inset-0">
                 <Image src={item.image} alt={item.alt} fill sizes={i === 0 ? "(min-width: 768px) 55vw, 100vw" : "(min-width: 768px) 40vw, 100vw"} className="object-cover" />
@@ -35,11 +35,11 @@ export default function Portfolio() {
                 </div>
                 <span className="font-cond text-sm tracking-[0.2em] text-teal">0{i + 1}</span>
               </div>
-            </a>
+            </DeadLink>
           ))}
         </div>
-        <div data-reveal="up" className="mt-12">
-          <a href={portfolio.href} className="btn text-navy"><Roll>View full portfolio</Roll><Arrow className="arrow" /></a>
+        <div data-reveal="up" className="mt-10">
+          <DeadLink className="btn text-navy"><Roll>View full portfolio</Roll><Arrow className="arrow" /></DeadLink>
         </div>
       </div>
     </section>

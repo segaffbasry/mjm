@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { newsletter } from "@/lib/content";
-import { Arrow, Roll, Split } from "./ui";
+import { Arrow, DeadLink, Roll, Split } from "./ui";
 
 const ids = ["firstname", "surname", "email"];
 
@@ -10,7 +10,7 @@ export default function Newsletter() {
   const [sent, setSent] = useState(false);
 
   return (
-    <section className="relative bg-navy-2 px-[var(--gutter)] py-[clamp(100px,12vw,180px)] text-white">
+    <section className="relative bg-navy-2 px-[var(--gutter)] py-[clamp(64px,7vw,112px)] text-white">
       <div className="mx-auto grid max-w-[1600px] gap-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <div data-reveal="up" className="mb-8 flex items-center gap-4">
@@ -58,9 +58,9 @@ export default function Newsletter() {
               </span>
               <span>
                 {newsletter.consentPrefix}{" "}
-                <a href="https://mjm-group.com/privacy-policy" className="uline text-white">
+                <DeadLink className="uline text-white">
                   {newsletter.consentLink}
-                </a>
+                </DeadLink>
               </span>
             </label>
 
